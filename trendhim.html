@@ -578,7 +578,7 @@ body:not([data-page="home"]) .cover, body:not([data-page="home"]) .cover-duo, bo
 .gooey-nav .sub a[aria-current="page"] { background: var(--blue); color: var(--on-blue); }
 .has-sub:hover .sub, .has-sub:focus-within .sub, .has-sub.open .sub { pointer-events: auto; }
 .has-sub:hover .sub li, .has-sub:focus-within .sub li, .has-sub.open .sub li { opacity: 1; transform: none; }
-@media (hover: none) { .has-sub:hover:not(.open) .sub { pointer-events: none; } .has-sub:hover:not(.open):not(:focus-within) .sub li { opacity: 0; transform: translateY(-8px) scale(.85); } }
+@media (hover: none), (pointer: coarse) { .has-sub:not(.open) .sub { pointer-events: none !important; } .has-sub:not(.open) .sub li { opacity: 0 !important; transform: translateY(-8px) scale(.85) !important; } }
 @media (max-width: 600px) { .gooey-nav .sub a { padding: 8px 14px; font-size: .85rem; } }
 @media (prefers-reduced-motion: reduce) { .gooey-nav .sub li { transition: opacity .15s; transform: none !important; } }
 
@@ -780,8 +780,11 @@ body:not([data-page="home"]) .cover, body:not([data-page="home"]) .cover-duo, bo
     /* sub-bubbles: on touch screens the first tap opens them, the second follows the link */
     [].slice.call(navEl.querySelectorAll('.has-sub')).forEach(function (li) {
       var a = li.querySelector(':scope > a');
+      var touch = false;
+      a.addEventListener('pointerdown', function (e) { touch = e.pointerType !== 'mouse'; }, true);
+      a.addEventListener('touchstart', function () { touch = true; }, { passive: true, capture: true });
       a.addEventListener('click', function (e) {
-        if (window.matchMedia('(hover: none)').matches && !li.classList.contains('open')) {
+        if ((touch || window.matchMedia('(hover: none)').matches) && !li.classList.contains('open')) {
           e.preventDefault(); e.stopImmediatePropagation();
           navEl.querySelectorAll('.has-sub.open').forEach(function (o) { o.classList.remove('open'); });
           li.classList.add('open');
