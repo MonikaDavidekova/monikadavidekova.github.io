@@ -712,6 +712,21 @@ body:not([data-page="home"]) .cover, body:not([data-page="home"]) .cover-duo, bo
       refresh: function () { if (current) { var b = box(current); if (b.w) place(b, false); } }
     };
   }
+    /* new pages always open at the top (unless the link points to a section with #) */
+  try { if ('scrollRestoration' in history) history.scrollRestoration = 'manual'; } catch (e) {}
+  if (!location.hash) {
+    var toTop = function () { window.scrollTo({ top: 0, left: 0, behavior: 'instant' }); };
+    toTop(); window.addEventListener('load', toTop);
+    window.addEventListener('pageshow', function (e) { if (e.persisted) toTop(); });
+  }
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('a[href]');
+    if (!a || a.target === '_blank') return;
+    var href = a.getAttribute('href');
+    if (href.indexOf('#') > -1 || /^(https?:|mailto:)/.test(href)) return;
+    var here = location.pathname.split('/').pop() || 'index.html';
+    if (href === here) { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+  });
   var groups = [];
 
   /* ---------- gooey nav ---------- */
