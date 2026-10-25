@@ -592,6 +592,7 @@ body:not([data-page="home"]) .cover, body:not([data-page="home"]) .cover-duo, bo
 @media (max-width: 600px) { .resume-bubble { min-height: 44px; width: 44px; padding: 0; justify-content: center; } .resume-bubble span { display: none; } .top .wrap { gap: 6px; } }
 @media (prefers-reduced-motion: reduce) { .resume-bubble, .resume-bubble svg { transition: background-color .2s; } .resume-bubble:hover, .resume-bubble:hover svg { transform: none; } }
 .top .wrap { align-items: stretch; } .resume-bubble { min-height: 0; } @media (max-width: 600px) { .resume-bubble { width: 47px; aspect-ratio: auto; } }
+#work, #about { scroll-margin-top: calc(20px - var(--space-section)); }
 
 </style>
 <script>document.documentElement.classList.add('js');</script>
