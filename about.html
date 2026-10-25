@@ -762,7 +762,8 @@ body:not([data-page="home"]) .cover, body:not([data-page="home"]) .cover-duo, bo
       var spy = function () {
         if (Date.now() < lock) return;
         var y = window.innerHeight * .4, hit = null;
-        targets.forEach(function (s, i) { if (!s) return; var r = s.getBoundingClientRect(); if (r.top <= y && r.bottom > y) hit = links[i]; });
+        /* the last section whose top has passed the line stays active, so gaps between sections keep the pill in place */
+        targets.forEach(function (s, i) { if (!s) return; if (s.getBoundingClientRect().top <= y) hit = links[i]; });
         if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4) hit = links[links.length - 1];
         var cur = links.filter(function (l) { return l.classList.contains('active'); })[0] || null;
         if (hit !== cur) setActive(hit, 'trail');
