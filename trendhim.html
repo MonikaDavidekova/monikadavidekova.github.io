@@ -605,6 +605,8 @@ body:not([data-page="home"]) .cover, body:not([data-page="home"]) .cover-duo, bo
 .g-media.yt-embed .play { position: relative; z-index: 1; box-shadow: 0 8px 24px rgba(0,0,0,.35); }
 .g-media.yt-embed:hover .play, .g-media.yt-embed:focus-visible .play { transform: scale(1.15); }
 iframe.yt-frame { display: block; width: 100%; border: 0; background: #000; }
+.g-media.yt-embed.tt { background: #1A0089; color: #FFF3D6; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; }
+.g-media.yt-embed.tt::before { display: none; }
 
 </style>
 <script>document.documentElement.classList.add('js');</script>
@@ -691,15 +693,15 @@ iframe.yt-frame { display: block; width: 100%; border: 0; background: #000; }
     </div></div>
     <div class="vrow-wrap"><h3 class="vrow-title">TikTok</h3><div class="vrow" data-stagger>
       <figure class="g-card" data-type="tiktok full" data-animate>
-        <a class="g-media tall yt" href="https://vm.tiktok.com/ZN8ASo4jQ/" target="_blank" rel="noopener" aria-label="Watch What do your veins say? on TikTok"><span class="play" aria-hidden="true"></span><span class="yt-label">Watch on TikTok</span></a>
+        <button type="button" class="g-media tall yt yt-embed tt" data-tt="7208585776639053061" aria-label="Play What do your veins say?"><span class="play" aria-hidden="true"></span><span class="yt-label">Play TikTok</span></button>
         <figcaption><b>What do your veins say?</b><span class="views">9.4M views</span><small>Idea, script, shoot, edit, voiceover, SEO captions</small></figcaption>
       </figure>
       <figure class="g-card" data-type="tiktok" data-animate>
-        <a class="g-media tall yt" href="https://vm.tiktok.com/ZN8AASGLj/" target="_blank" rel="noopener" aria-label="Watch What do your fingers say? on TikTok"><span class="play" aria-hidden="true"></span><span class="yt-label">Watch on TikTok</span></a>
+        <button type="button" class="g-media tall yt yt-embed tt" data-tt="7205618740585565446" aria-label="Play What do your fingers say?"><span class="play" aria-hidden="true"></span><span class="yt-label">Play TikTok</span></button>
         <figcaption><b>What do your fingers say?</b><span class="views">2.4M views</span></figcaption>
       </figure>
       <figure class="g-card" data-type="tiktok full" data-animate>
-        <a class="g-media tall yt" href="https://vm.tiktok.com/ZN8AArse6/" target="_blank" rel="noopener" aria-label="Watch The easiest way to put on a bracelet on TikTok"><span class="play" aria-hidden="true"></span><span class="yt-label">Watch on TikTok</span></a>
+        <button type="button" class="g-media tall yt yt-embed tt" data-tt="7221556716805131546" aria-label="Play The easiest way to put on a bracelet"><span class="play" aria-hidden="true"></span><span class="yt-label">Play TikTok</span></button>
         <figcaption><b>The easiest way to put on a bracelet</b><span class="views">989K views</span><small>Idea, script, shoot, edit, voiceover, SEO captions</small></figcaption>
       </figure>
     </div></div>
@@ -787,6 +789,17 @@ iframe.yt-frame { display: block; width: 100%; border: 0; background: #000; }
     b.addEventListener('click', function () {
       var f = document.createElement('iframe');
       f.src = 'https://www.youtube-nocookie.com/embed/' + b.dataset.yt + '?autoplay=1&playsinline=1&rel=0';
+      f.title = b.getAttribute('aria-label').replace(/^Play /, '');
+      f.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
+      f.allowFullscreen = true;
+      f.className = 'g-media tall yt-frame';
+      b.replaceWith(f);
+    });
+  });
+  [].slice.call(document.querySelectorAll('[data-tt]')).forEach(function (b) {
+    b.addEventListener('click', function () {
+      var f = document.createElement('iframe');
+      f.src = 'https://www.tiktok.com/player/v1/' + b.dataset.tt + '?autoplay=1&music_info=0&description=0&rel=0';
       f.title = b.getAttribute('aria-label').replace(/^Play /, '');
       f.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
       f.allowFullscreen = true;
