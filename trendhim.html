@@ -599,6 +599,13 @@ body:not([data-page="home"]) .cover, body:not([data-page="home"]) .cover-duo, bo
 .top .wrap { align-items: stretch; } .resume-bubble { min-height: 0; } @media (max-width: 600px) { .resume-bubble { width: 47px; aspect-ratio: auto; } }
 #work, #about { scroll-margin-top: calc(20px - var(--space-section)); }
 
+/* YouTube Shorts played on the page */
+.g-media.yt-embed { border: 0; padding: 0; cursor: pointer; width: 100%; background-color: #111; background-size: cover; background-position: center; position: relative; }
+.g-media.yt-embed::before { content: ""; position: absolute; inset: 0; background: linear-gradient(transparent 55%, rgba(0,0,0,.35)); border-radius: inherit; }
+.g-media.yt-embed .play { position: relative; z-index: 1; box-shadow: 0 8px 24px rgba(0,0,0,.35); }
+.g-media.yt-embed:hover .play, .g-media.yt-embed:focus-visible .play { transform: scale(1.15); }
+iframe.yt-frame { display: block; width: 100%; border: 0; background: #000; }
+
 </style>
 <script>document.documentElement.classList.add('js');</script>
 </head>
@@ -666,19 +673,19 @@ body:not([data-page="home"]) .cover, body:not([data-page="home"]) .cover-duo, bo
   <div class="vrows">
     <div class="vrow-wrap"><h3 class="vrow-title">YouTube</h3><div class="vrow" data-stagger>
       <figure class="g-card" data-type="youtube full" data-animate>
-        <a class="g-media tall yt" href="https://www.youtube.com/shorts/xMpwuHbRmRU" target="_blank" rel="noopener" aria-label="Watch How to tie a tie in under 10 seconds on YouTube"><span class="play" aria-hidden="true"></span><span class="yt-label">Watch on YouTube</span></a>
+        <button type="button" class="g-media tall yt yt-embed" data-yt="xMpwuHbRmRU" style="background-image:url(https://i.ytimg.com/vi/xMpwuHbRmRU/hqdefault.jpg)" aria-label="Play How to tie a tie in under 10 seconds"><span class="play" aria-hidden="true"></span></button>
         <figcaption><b>How to tie a tie in under 10 seconds</b><span class="views">27M views</span><small>Idea, script, shoot, edit, voiceover, SEO captions</small></figcaption>
       </figure>
       <figure class="g-card" data-type="youtube" data-animate>
-        <a class="g-media tall yt" href="https://www.youtube.com/shorts/REFpGvBjhbw" target="_blank" rel="noopener" aria-label="Watch How to find the best sunglasses for your face shape on YouTube"><span class="play" aria-hidden="true"></span><span class="yt-label">Watch on YouTube</span></a>
+        <button type="button" class="g-media tall yt yt-embed" data-yt="REFpGvBjhbw" style="background-image:url(https://i.ytimg.com/vi/REFpGvBjhbw/hqdefault.jpg)" aria-label="Play How to find the best sunglasses for your face shape"><span class="play" aria-hidden="true"></span></button>
         <figcaption><b>How to find the best sunglasses for your face shape</b><span class="views">2.8M views</span><small>Edit, SEO captions</small></figcaption>
       </figure>
       <figure class="g-card" data-type="youtube" data-animate>
-        <a class="g-media tall yt" href="https://www.youtube.com/shorts/XdECU5V66zc" target="_blank" rel="noopener" aria-label="Watch Measure your ring size in less than 30 seconds on YouTube"><span class="play" aria-hidden="true"></span><span class="yt-label">Watch on YouTube</span></a>
+        <button type="button" class="g-media tall yt yt-embed" data-yt="XdECU5V66zc" style="background-image:url(https://i.ytimg.com/vi/XdECU5V66zc/hqdefault.jpg)" aria-label="Play Measure your ring size in less than 30 seconds"><span class="play" aria-hidden="true"></span></button>
         <figcaption><b>Measure your ring size in less than 30 seconds</b><span class="views">998K views</span><small>Shoot, edit, SEO captions</small></figcaption>
       </figure>
       <figure class="g-card" data-type="youtube full" data-animate>
-        <a class="g-media tall yt" href="https://www.youtube.com/shorts/xCRwZtSVlr0" target="_blank" rel="noopener" aria-label="Watch Gold, silver or both? Ask your veins on YouTube"><span class="play" aria-hidden="true"></span><span class="yt-label">Watch on YouTube</span></a>
+        <button type="button" class="g-media tall yt yt-embed" data-yt="xCRwZtSVlr0" style="background-image:url(https://i.ytimg.com/vi/xCRwZtSVlr0/hqdefault.jpg)" aria-label="Play Gold, silver or both? Ask your veins"><span class="play" aria-hidden="true"></span></button>
         <figcaption><b>Gold, silver or both? Ask your veins</b><span class="views">159K views</span><small>Idea, script, shoot, edit, voiceover, SEO captions</small></figcaption>
       </figure>
     </div></div>
@@ -774,6 +781,18 @@ body:not([data-page="home"]) .cover, body:not([data-page="home"]) .cover-duo, bo
     if (href.indexOf('#') > -1 || /^(https?:|mailto:)/.test(href)) return;
     var here = location.pathname.split('/').pop() || 'index.html';
     if (href === here) { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+  });
+  /* YouTube Shorts play right on the page: the player loads only after a click */
+  [].slice.call(document.querySelectorAll('[data-yt]')).forEach(function (b) {
+    b.addEventListener('click', function () {
+      var f = document.createElement('iframe');
+      f.src = 'https://www.youtube-nocookie.com/embed/' + b.dataset.yt + '?autoplay=1&playsinline=1&rel=0';
+      f.title = b.getAttribute('aria-label').replace(/^Play /, '');
+      f.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
+      f.allowFullscreen = true;
+      f.className = 'g-media tall yt-frame';
+      b.replaceWith(f);
+    });
   });
   var groups = [];
 

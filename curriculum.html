@@ -599,6 +599,13 @@ body:not([data-page="home"]) .cover, body:not([data-page="home"]) .cover-duo, bo
 .top .wrap { align-items: stretch; } .resume-bubble { min-height: 0; } @media (max-width: 600px) { .resume-bubble { width: 47px; aspect-ratio: auto; } }
 #work, #about { scroll-margin-top: calc(20px - var(--space-section)); }
 
+/* YouTube Shorts played on the page */
+.g-media.yt-embed { border: 0; padding: 0; cursor: pointer; width: 100%; background-color: #111; background-size: cover; background-position: center; position: relative; }
+.g-media.yt-embed::before { content: ""; position: absolute; inset: 0; background: linear-gradient(transparent 55%, rgba(0,0,0,.35)); border-radius: inherit; }
+.g-media.yt-embed .play { position: relative; z-index: 1; box-shadow: 0 8px 24px rgba(0,0,0,.35); }
+.g-media.yt-embed:hover .play, .g-media.yt-embed:focus-visible .play { transform: scale(1.15); }
+iframe.yt-frame { display: block; width: 100%; border: 0; background: #000; }
+
 </style>
 <script>document.documentElement.classList.add('js');</script>
 </head>
@@ -728,6 +735,18 @@ body:not([data-page="home"]) .cover, body:not([data-page="home"]) .cover-duo, bo
     if (href.indexOf('#') > -1 || /^(https?:|mailto:)/.test(href)) return;
     var here = location.pathname.split('/').pop() || 'index.html';
     if (href === here) { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+  });
+  /* YouTube Shorts play right on the page: the player loads only after a click */
+  [].slice.call(document.querySelectorAll('[data-yt]')).forEach(function (b) {
+    b.addEventListener('click', function () {
+      var f = document.createElement('iframe');
+      f.src = 'https://www.youtube-nocookie.com/embed/' + b.dataset.yt + '?autoplay=1&playsinline=1&rel=0';
+      f.title = b.getAttribute('aria-label').replace(/^Play /, '');
+      f.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
+      f.allowFullscreen = true;
+      f.className = 'g-media tall yt-frame';
+      b.replaceWith(f);
+    });
   });
   var groups = [];
 
